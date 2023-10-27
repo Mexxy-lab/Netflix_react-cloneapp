@@ -14,14 +14,14 @@ pipeline {
             steps {
                 script {
                     // build image
-                    docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.1")
+                    docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v2.0.0")
                }
             }
        }
        stage('Trivy Scan (Aqua)') {
             steps {
 
-                sh 'trivy image --format template --output trivy_report.html 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.1'
+                sh 'trivy image --format template --output trivy_report.html 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v2.0.0'
             }
        }
         stage('Push to AWS ECR') {
@@ -31,7 +31,7 @@ pipeline {
                         docker.withRegistry('https://598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo', 'ecr:ap-south-1:pumejawsacr'){
 
                          // Tagging image
-                         def myImage = docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.1")
+                         def myImage = docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v2.0.0")
 
                            // pushing image upload....Amazon ECR
                          myImage.push()
