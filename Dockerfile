@@ -12,6 +12,8 @@ COPY . .
 #RUN npm update
 RUN yarn install && yarn run build
 
+# Second stage of the Dockerfile
+
 # nginx state for serving content
 FROM nginx:bullseye
 # Set working directory to nginx asset directory
