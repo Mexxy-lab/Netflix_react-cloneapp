@@ -7,7 +7,7 @@ pipeline {
         // NPM dependencies
         stage('pull npm dependencies') {
             steps {
-                sh 'yarn install'
+                sh 'npm install'
             }
         }
        stage('build Docker Image') {
