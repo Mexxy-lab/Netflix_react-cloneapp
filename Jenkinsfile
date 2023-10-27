@@ -14,13 +14,13 @@ pipeline {
             steps {
                 script {
                     // build image
-                    docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:latest")
+                    docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0")
                }
             }
         }
         stage('Trivy Scan (Aqua)') {
             steps {
-                sh 'trivy image --format template --output trivy_report.html 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:latest'
+                sh 'trivy image --format template --output trivy_report.html 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0'
             }
        }
         stage('Push to ECR') {
@@ -28,7 +28,7 @@ pipeline {
                 script{
                     //https://<AwsAccountNumber>.dkr.ecr.<region>.amazonaws.com/netflix-app', 'ecr:<region>:<credentialsId>
                     docker.withRegistry('598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo', 'ecr:ap-south-1:pumejawsacr') {
-                    // build image
+                    // Tagging image
                     def myImage = docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0")
                     // push image
                     myImage.push()
