@@ -1,11 +1,11 @@
 # Define the provider for AWS
 provider "aws" {
-  region = "eu-west-2"  
+  region = "ap-south-1"
 }
 
 # Create an ECS cluster
-resource "aws_ecs_cluster" "my_cluster" {
-  name = "karo-ecs-cluster"  
+resource "aws_ecs_cluster" "pumej_cluster" {
+  name = "pumej-ecs-cluster"
 }
 
 # Create a task definition
@@ -19,8 +19,8 @@ resource "aws_ecs_task_definition" "my_task_definition" {
   container_definitions = <<EOF
 [
   {
-    "name": "my-container",
-    "image": "335871625378.dkr.ecr.eu-west-2.amazonaws.com/netflix-app:latest",  
+    "name": "pumej-container",
+    "image": "598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0",
     "portMappings": [
       {
         "containerPort": 80,
@@ -34,8 +34,8 @@ EOF
 
 # Create a service to run the task on the cluster
 resource "aws_ecs_service" "my_service" {
-  name            = "my-service"
-  cluster         = aws_ecs_cluster.my_cluster.id
+  name            = "pumej-service"
+  cluster         = aws_ecs_cluster.pumej_cluster.id
   task_definition = aws_ecs_task_definition.my_task_definition.arn
   desired_count   = 1
   launch_type     = "FARGATE"
