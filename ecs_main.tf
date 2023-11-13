@@ -10,13 +10,13 @@ resource "aws_ecs_cluster" "pumej_cluster" {
 
 # Create a task definition
 resource "aws_ecs_task_definition" "my_task_definition" {
-  family                = "my-task-family-test"
+  family                   = "my-task-family-test"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 1024
   memory                   = 2048
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  container_definitions = <<EOF
+  container_definitions    = <<EOF
 [
   {
     "name": "pumej-container",
@@ -47,7 +47,7 @@ resource "aws_ecs_service" "my_service" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ecs_task_execution_role"
+  name               = "ecs_task_execution_role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
