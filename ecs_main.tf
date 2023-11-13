@@ -4,7 +4,7 @@ provider "aws" {
 }
 
 # Create an ECS cluster
-resource "aws_ecs_cluster" "pumej_cluster" {
+resource "aws_ecs_cluster" "my_cluster" {
   name = "pumej-ecs-cluster"
 }
 
@@ -35,12 +35,12 @@ EOF
 # Create a service to run the task on the cluster
 resource "aws_ecs_service" "my_service" {
   name            = "pumej-service"
-  cluster         = aws_ecs_cluster.pumej_cluster.id
+  cluster         = aws_ecs_cluster.my_cluster.id
   task_definition = aws_ecs_task_definition.my_task_definition.arn
   desired_count   = 1
   launch_type     = "FARGATE"
   network_configuration {
-    subnets          = ["subnet-026498b74df444385"]
+    subnets          = ["subnet-0f3c3846f9c0551b6"]
     security_groups  = ["sg-08849123726c14ea7"]
     assign_public_ip = true
   }
