@@ -10,7 +10,7 @@ resource "aws_ecs_cluster" "pumej_cluster" {
 
 # Create a task definition
 resource "aws_ecs_task_definition" "my_task_definition" {
-  family                   = "my-task-family-test1"
+  family                   = "my-task-family-test"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   cpu                      = 1024
@@ -19,8 +19,8 @@ resource "aws_ecs_task_definition" "my_task_definition" {
   container_definitions    = <<EOF
 [
   {
-    "name": "pumej-container1",
-    "image": "598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0",
+    "name": "pumej-container",
+    "image": "598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0",
     "portMappings": [
       {
         "containerPort": 80,
