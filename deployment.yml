@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: netflix-deployment
+  name: pumejnetflix-deployment
   namespace: default
   labels:
     app: netflix-app
@@ -23,7 +23,7 @@ spec:
     spec: # Pod spec
       containers:
       - name: netflix-container
-        image: pumej/amazon:latest
+        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0
         ports:
         - containerPort: 80
         

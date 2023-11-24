@@ -33,7 +33,7 @@ pipeline {
                          // Tagging image
                          def myImage = docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0")
 
-                           // pushing image upload....Amazon ECR
+                          // pushing image upload....Amazon ECR
                          myImage.push()
                          }
                   }

@@ -21,3 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+terraform.tfstate
+terraform.tfstate.backup
+package-lock.json
+.terraform
+.terraform.lock.hcl
+.idea
+.idea/misc.xml
