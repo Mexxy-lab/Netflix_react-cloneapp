@@ -23,9 +23,18 @@ spec:
     spec: # Pod spec
       containers:
       - name: netflix-container
-        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0
+        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0.0
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+    imagePullSecrets:
+      - name: ecr-secrets        
         
         
 ---

@@ -1,3 +1,5 @@
+// Jenkinsfile to deploy the infrastructure
+
 pipeline {
     agent any
    
@@ -5,9 +7,9 @@ pipeline {
     choice choices: ['apply', 'destroy'], description: 'Select the Appropriate Action Please', name: 'action'
        }
     environment {
-        AWS_ACCESS_KEY_ID = credentials('pumej_aws_access_id')
+        AWS_ACCESS_KEY_ID     = credentials('pumej_aws_access_id')
         AWS_SECRET_ACCESS_KEY = credentials('pumej_aws_secret_key')
-        AWS_DEFAULT_REGION = "ap-south-1"
+        AWS_REGION = "ap-south-1"
     }
     stages {
         stage('Checkout') {

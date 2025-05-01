@@ -1,44 +1,75 @@
+// Jenkinsfile to build and push image to Amazon ECR
+
 pipeline {
     agent any
+
     options {
-        timeout(time: 20, unit: 'MINUTES')
+        timeout(time: 15, unit: 'MINUTES')
     }
-    stages{
-        // NPM dependencies
-        stage('pull npm dependencies') {
+
+    environment {
+        AWS_REGION = "ap-south-1"
+        AWS_ACCESS_KEY_ID     = credentials('pumej_aws_access_id')
+        AWS_SECRET_ACCESS_KEY = credentials('pumej_aws_secret_key')
+        ECR_NAME = "pumejnetflix"
+        registryUrl = "598189530267.dkr.ecr.ap-south-1.amazonaws.com"
+        IMAGE_TAG = "v1.0"
+    }
+
+    stages {
+        stage('SCM Checkout') {
             steps {
-                sh 'yarn install'
+                git branch: 'main', url: 'https://github.com/Mexxy-lab/Netflix_react-cloneapp.git'
             }
         }
-       stage('build Docker Image') {
+
+        stage('Docker Build') {
             steps {
-                script {
-                    // build image
-                    docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0")
-               }
+                sh """
+                    docker build --network=host -t ${registryUrl}/${ECR_NAME}:${IMAGE_TAG} .
+                """
             }
-       }
-       stage('Trivy Scan (Aqua)') {
-            steps {
-
-                sh 'trivy image --format template --output trivy_report.html 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0'
-            }
-       }
-        stage('Push to AWS ECR') {
-             steps {
-                  script{
-                        //https://AwsAccountNumber.dkr.ecr.region.amazonaws.com/rekeyole-app', 'ecr:region:credentialsId
-                        docker.withRegistry('https://598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo', 'ecr:ap-south-1:pumejawsacr'){
-
-                         // Tagging image
-                         def myImage = docker.build("598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo:v1.0.0")
-
-                          // pushing image upload....Amazon ECR
-                         myImage.push()
-                         }
-                  }
-             }
         }
-        
+
+        stage('Login to ECR') {
+            steps {
+                sh """
+                    echo "🔑 Logging into Amazon ECR..."
+                    aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
+                    aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
+                    aws configure set region ${AWS_REGION}
+                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${registryUrl}
+                """
+            }
+        }
+
+        stage('Trivy Scan (Aqua)') {
+            steps {
+                sh """
+                    echo "🔍 Running Trivy vulnerability scan..."
+                    trivy image \
+                      --scanners vuln \
+                      --severity HIGH,CRITICAL \
+                      --timeout 10m \
+                      ${registryUrl}/${ECR_NAME}:${IMAGE_TAG}
+                """
+            }
+        }
+
+        stage('Push Docker Image to ECR') {
+            steps {
+                sh """
+                    echo "🚀 Pushing Docker image to Amazon ECR..."
+                    docker push ${registryUrl}/${ECR_NAME}:${IMAGE_TAG}
+                """
+            }
+        }
+
+    }
+
+    post {
+        always {
+            echo "✅ Build Deployed Successfully, downstream job triggered!"
+        }
     }
 }
