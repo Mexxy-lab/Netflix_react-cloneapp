@@ -35,8 +35,6 @@ spec:
             cpu: "500m"
     imagePullSecrets:
       - name: ecr-secrets        
-        
-        
 ---
 apiVersion: v1
 kind: Service
