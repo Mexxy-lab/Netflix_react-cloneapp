@@ -64,7 +64,12 @@ pipeline {
                 """
             }
         }
+        stage('Trigger Netflix Deployment Job') {
+             steps{
+                build job: 'netflix-deployment'
 
+             }
+           }        
     }
 
     post {

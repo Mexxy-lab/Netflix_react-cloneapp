@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "my_task_definition" {
 [
   {
     "name": "pumej-container",
-    "image": "598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0.0",
+    "image": "598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0",
     "portMappings": [
       {
         "containerPort": 80,
