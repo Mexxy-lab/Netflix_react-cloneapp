@@ -1,5 +1,7 @@
 // Jenkinsfile to build and push image to Amazon ECR
 
+// Jenkinsfile to build and push image to Amazon ECR
+
 pipeline {
     agent any
 
@@ -13,7 +15,7 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('pumej_aws_secret_key')
         ECR_NAME = "pumejnetflix"
         registryUrl = "598189530267.dkr.ecr.ap-south-1.amazonaws.com"
-        IMAGE_TAG = "v1.0"
+        IMAGE_TAG = "v${BUILD_NUMBER}"
     }
 
     stages {
@@ -26,6 +28,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 sh """
+                    echo "📦 Building image with tag: ${IMAGE_TAG}"
                     docker build --network=host -t ${registryUrl}/${ECR_NAME}:${IMAGE_TAG} .
                 """
             }
@@ -78,7 +81,8 @@ pipeline {
                     build job: 'netflixapp-deployment',
                         wait: true,
                         parameters: [
-                            string(name: 'action', value: userChoice)
+                            string(name: 'action', value: userChoice),
+                            string(name: 'IMAGE_TAG', value: IMAGE_TAG)
                         ]
                 }
             }
@@ -87,7 +91,8 @@ pipeline {
 
     post {
         always {
-            echo "✅ Build Deployed Successfully, downstream job triggered!"
+            echo "✅ Build ${BUILD_NUMBER} deployed successfully with image tag ${IMAGE_TAG}!"
         }
     }
 }
+
