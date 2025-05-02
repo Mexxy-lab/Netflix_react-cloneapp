@@ -1,11 +1,48 @@
 // Jenkinsfile to deploy the infrastructure
 
+// pipeline {
+//     agent any
+   
+//     parameters {
+//     choice choices: ['apply', 'destroy'], description: 'Select the Appropriate Action Please', name: 'action'
+//        }
+//     environment {
+//         AWS_ACCESS_KEY_ID     = credentials('pumej_aws_access_id')
+//         AWS_SECRET_ACCESS_KEY = credentials('pumej_aws_secret_key')
+//         AWS_REGION = "ap-south-1"
+//     }
+//     stages {
+//         stage('Checkout') {
+//             steps {
+//            git branch: 'main', url: 'https://github.com/Mexxy-lab/Netflix_react-cloneapp.git'
+  
+//             }
+//         }
+    
+//         stage ("terraform init") {
+//             steps {
+//                 sh "terraform init" 
+//             }
+//         }
+  
+//         stage ("plan") {
+//             steps {
+//                 sh "terraform plan" 
+//             }
+//         }
+//         stage (" Action") {
+//             steps {
+//                 sh 'terraform ${action} --auto-approve' 
+//            }
+//         }
+//     }
+// }
+
 pipeline {
     agent any
-   
     parameters {
-    choice choices: ['apply', 'destroy'], description: 'Select the Appropriate Action Please', name: 'action'
-       }
+        string(name: 'action', defaultValue: 'destroy', description: 'apply or destroy')
+    }
     environment {
         AWS_ACCESS_KEY_ID     = credentials('pumej_aws_access_id')
         AWS_SECRET_ACCESS_KEY = credentials('pumej_aws_secret_key')
@@ -14,26 +51,34 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-           git branch: 'main', url: 'https://github.com/Mexxy-lab/Netflix_react-cloneapp.git'
-  
+                git branch: 'main', url: 'https://github.com/Mexxy-lab/Netflix_react-cloneapp.git'
             }
         }
-    
-        stage ("terraform init") {
+
+        stage("Terraform Init") {
             steps {
-                sh "terraform init" 
+                sh "terraform init"
             }
         }
-  
-        stage ("plan") {
+
+        stage("Terraform Plan") {
             steps {
-                sh "terraform plan" 
+                sh "terraform plan"
             }
         }
-        stage (" Action") {
+
+        stage("Terraform Action") {
             steps {
-                sh 'terraform ${action} --auto-approve' 
-           }
+                script {
+                    if (params.action == 'apply') {
+                        sh 'terraform apply -auto-approve'
+                    } else if (params.action == 'destroy') {
+                        sh 'terraform destroy -auto-approve'
+                    } else {
+                        error("Unknown action: ${params.action}")
+                    }
+                }
+            }
         }
     }
 }

@@ -16,8 +16,8 @@ phases:
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 598189530267.dkr.ecr.ap-south-1.amazonaws.com
-      - IMAGE_REPO_NAME=598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejrepo
-      - IMAGE_TAG=latest
+      - IMAGE_REPO_NAME=598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix
+      - IMAGE_TAG=v1.0
       - aws eks --region ap-south-1 update-kubeconfig --name pumejcluster
   build:
     commands:

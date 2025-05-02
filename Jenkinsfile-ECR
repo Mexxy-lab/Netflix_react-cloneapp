@@ -65,12 +65,23 @@ pipeline {
             }
         }
         stage('Trigger Netflix Deployment Job') {
-             steps{
-                build job: 'netflix-deployment'
+            steps {
+                script {
+                    def userChoice = input(
+                        message: 'Select the action to perform on Netflix infrastructure:',
+                        parameters: [
+                            choice(name: 'action', choices: ['apply', 'destroy'], description: 'Choose apply or destroy')
+                        ]
+                    )
 
-             }
-           }        
-    }
+                    build job: 'netflixapp-deployment',
+                        wait: true,
+                        parameters: [
+                            string(name: 'action', value: userChoice)
+                        ]
+                }
+            }
+        }
 
     post {
         always {
