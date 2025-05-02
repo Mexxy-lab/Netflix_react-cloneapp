@@ -53,6 +53,20 @@ eksctl create iamidentitymapping --cluster nameofcluster --region=region --arn r
 
 - After deployment on the k8s cluster you can access the application using the external ip address assigned
 
+- Make sure to also create your secret for pulling the image from ECR. Use below command.
+
+```bash
+kubectl create secret docker-registry ecr-secrets \
+--docker-server=598189530267.dkr.ecr.ap-south-1.amazonaws.com \
+--docker-username=AWS \
+--docker-password=$(aws ecr get-login-password --region ap-south-1) \
+--docker-email=pumej@yahoo.com -n default
+```
+
+```bash
+kubectl get secret ecr-secrets -n default -o yaml > ecr-secret.yaml         | Would export it to a file called ecr-secret.yaml
+```
+
 ```bash
 kubectl get svc netflix-service -n default
 ```
