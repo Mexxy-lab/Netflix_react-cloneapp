@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pumejnetflix-deployment
-  namespace: default
+  namespace: netflixapp
   labels:
     app: netflix-app
 spec:
@@ -13,17 +13,16 @@ spec:
       app: netflix-app
       tier: frontend
       version: 1.0.0
-#pod tempalte
   template:
     metadata:
       labels:
         app: netflix-app
         tier: frontend
         version: 1.0.0
-    spec: # Pod spec
+    spec:
       containers:
       - name: netflix-container
-        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0.0
+        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0
         ports:
         - containerPort: 80
         resources:
@@ -33,8 +32,8 @@ spec:
           limits:
             memory: "512Mi"
             cpu: "500m"
-    imagePullSecrets:
-      - name: ecr-secrets        
+      imagePullSecrets:
+        - name: ecr-secrets
 ---
 apiVersion: v1
 kind: Service
