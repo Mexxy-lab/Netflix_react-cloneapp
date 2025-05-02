@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pumejnetflix-deployment
-  namespace: netflixapp
+  namespace: default 
   labels:
     app: netflix-app
 spec:
