@@ -13,7 +13,6 @@ variables:
 
 before_script:
   - echo "Running job in stage $CI_JOB_STAGE"
-  # - rm -rf $CI_BUILDS_DIR/* || true
 
 build-job:       
   stage: build
@@ -78,12 +77,12 @@ sonarqube-vulnerability-report:
   only:
     - main
     - develop
-  artifacts:
-    expire_in: 1 day
-    reports:
-      sast: gl-sast-sonar-report.json
-  dependencies:
-    - sonarqube-check
+  # artifacts:
+  #   expire_in: 1 day
+  #   reports:
+  #     sast: gl-sast-sonar-report.json
+  # dependencies:
+  #   - sonarqube-check
 
 package-job:
   stage: package
