@@ -51,7 +51,7 @@ CODEBUILDKUBECTLROLE
 eksctl create iamidentitymapping --cluster nameofcluster --region=region --arn rolearncreated --group system:masters --username CodeBuildKubectlRole
 ```
 
-- After deployment on the k8s cluster you can access the application using the external ip address assigned
+- After deployment on the k8s cluster you can access the application using the external ip address assigned.
 
 - Make sure to also create your secret for pulling the image from ECR. Use below command.
 
