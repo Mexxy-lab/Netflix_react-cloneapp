@@ -13,7 +13,7 @@ variables:
 
 before_script:
   - echo "Running job in stage $CI_JOB_STAGE"
-  - rm -rf $CI_BUILDS_DIR/* || true
+  # - rm -rf $CI_BUILDS_DIR/* || true
 
 build-job:       
   stage: build
