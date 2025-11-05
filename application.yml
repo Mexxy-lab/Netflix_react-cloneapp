@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflixapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: netflixapp
+  template:
+    metadata:
+      labels:
+        app: netflixapp
+    spec:
+      containers:
+        - name: netflixapp
+          image: registry.gitlab.com/mexxy-lab/netflix_react-cloneapp:1
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 500m
+              ephemeral-storage: "1Gi"
+            requests:
+              memory: 64Mi
+              cpu: 250m
+              ephemeral-storage: "512Mi"
+          ports:
+            - containerPort: 80
+      automountServiceAccountToken: false
+      imagePullSecrets:
+        - name: gitlab-registry-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflixapp-service
+spec:
+  selector:
+    app: netflixapp
+  ports:
+  - protocol: TCP
+    port: 82
+    targetPort: 80
+    nodePort: 30380
+  type: LoadBalancer

@@ -1,0 +1,115 @@
+image: node:16
+
+stages:          
+  - build
+  - test
+  - sonarqube-check
+  - sonarqube-vulnerability-report
+  - package
+  - deploy
+
+variables:
+  IMAGE_NAME: registry.gitlab.com/mexxy-lab/netflix_react-cloneapp
+
+before_script:
+  - echo "Running job in stage $CI_JOB_STAGE"
+
+build-job:       
+  stage: build
+  tags:
+    - npm
+    - ubuntu
+    - pumej
+  script:
+    - npm install
+
+test-job:   
+  stage: test 
+  tags:
+    - npm
+    - ubuntu
+    - pumej   
+  script:
+    - npm install
+    - npm test -- --watchAll=false
+
+# sonarqube-analysis:
+#   stage: sonarqube
+#   tags:
+#     - npm
+#     - ubuntu
+#     - pumej
+#   script:
+#     - npm install -g sonar-scanner
+#     - sonar-scanner -Dsonar.projectKey=nodeproject -Dsonar.sources=. -Dsonar.host.url=http://192.168.248.133:9000 -Dsonar.login=$SONAR_TOKEN
+
+sonarqube-check:
+  stage: sonarqube-check
+  tags:
+  - npm
+  - ubuntu
+  - pumej
+  # image: 
+  #   name: sonarsource/sonar-scanner-cli:5.0
+  #   entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+    GIT_DEPTH: "0"
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - sonar-scanner -Dsonar.token=$SONAR_TOKEN
+  allow_failure: true
+  only:
+    - main
+
+sonarqube-vulnerability-report:
+  stage: sonarqube-vulnerability-report
+  tags:
+    - npm
+    - ubuntu
+    - pumej
+  script:
+    - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=netflix-react-clone&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
+  allow_failure: true
+  only:
+    - main
+    - develop
+  artifacts:
+    expire_in: 1 day
+    reports:
+      sast: gl-sast-sonar-report.json
+  dependencies:
+    - sonarqube-check
+
+package-job:
+  stage: package
+  image: docker:latest
+  # services:
+  #   - docker:dind
+  tags:
+    - docker
+    - ubuntu
+    - pumej
+  script:
+    - echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin registry.gitlab.com
+    - docker build -t $IMAGE_NAME:$CI_PIPELINE_IID .
+    - docker push $IMAGE_NAME:$CI_PIPELINE_IID
+
+# deploy-job:
+#   stage: deploy
+#   tags:
+#     - npm
+#     - ubuntu
+#     - pumej
+#   script:
+#     - export KUBECONFIG=$HOME/.kube/config
+#     - kubectl config current-context || echo "kubectl context not found"
+#     - kubectl apply -f application.yaml
+#     - kubectl get nodes 
+#     - kubectl get pods -n default
+#     - kubectl get services -n default
+#     - kubectl get deployments -n default
+#     - kubectl describe deployment nodejsapp -n default
