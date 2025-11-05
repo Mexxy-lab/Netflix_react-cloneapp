@@ -1,4 +1,3 @@
-#deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,20 +19,24 @@ spec:
         tier: frontend
         version: 1.0.0
     spec:
+      automountServiceAccountToken: false
       containers:
-      - name: netflix-container
-        image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
+        - name: netflix-container
+          image: 598189530267.dkr.ecr.ap-south-1.amazonaws.com/pumejnetflix:v1.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+              ephemeral-storage: "512Mi"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+              ephemeral-storage: "1Gi"
       imagePullSecrets:
         - name: ecr-secrets
+
 ---
 apiVersion: v1
 kind: Service

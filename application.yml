@@ -13,7 +13,7 @@ spec:
         app: netflixapp
     spec:
       containers:
-        - name: netflixapp
+        - name: netflixapp-container
           image: registry.gitlab.com/mexxy-lab/netflix_react-cloneapp:1
           resources:
             limits:
