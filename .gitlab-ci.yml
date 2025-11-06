@@ -36,9 +36,9 @@ test-job:
 # sonarqube-analysis:
 #   stage: sonarqube
 #   tags:
-#     - npm
+#     - yarn
 #     - ubuntu
-#     - pumej
+#     - netflix
 #   script:
 #     - npm install -g sonar-scanner
 #     - sonar-scanner -Dsonar.projectKey=nodeproject -Dsonar.sources=. -Dsonar.host.url=http://192.168.248.133:9000 -Dsonar.login=$SONAR_TOKEN
