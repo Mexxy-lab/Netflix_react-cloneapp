@@ -17,18 +17,18 @@ before_script:
 build-job:       
   stage: build
   tags:
-    - npm
+    - yarn
     - ubuntu
-    - pumej
+    - netflix
   script:
     - npm install
 
 test-job:   
   stage: test 
   tags:
-    - npm
+    - yarn
     - ubuntu
-    - pumej   
+    - netflix
   script:
     - npm install
     - npm test -- --watchAll=false
@@ -46,9 +46,9 @@ test-job:
 sonarqube-check:
   stage: sonarqube-check
   tags:
-  - npm
-  - ubuntu
-  - pumej
+    - yarn
+    - ubuntu
+    - netflix
   # image: 
   #   name: sonarsource/sonar-scanner-cli:5.0
   #   entrypoint: [""]
@@ -68,9 +68,9 @@ sonarqube-check:
 sonarqube-vulnerability-report:
   stage: sonarqube-vulnerability-report
   tags:
-    - npm
+    - yarn
     - ubuntu
-    - pumej
+    - netflix
   script:
     - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=netflix-react-clone&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
   allow_failure: true
@@ -101,9 +101,9 @@ package-job:
 # deploy-job:
 #   stage: deploy
 #   tags:
-#     - npm
+#     - yarn
 #     - ubuntu
-#     - pumej
+#     - netflix
 #   script:
 #     - export KUBECONFIG=$HOME/.kube/config
 #     - kubectl config current-context || echo "kubectl context not found"
