@@ -53,7 +53,7 @@ eksctl create iamidentitymapping --cluster nameofcluster --region=region --arn r
 
 - After deployment on the k8s cluster you can access the application using the external ip address assigned.
 
-- Make sure to also create your secret for pulling the image from ECR. Use below command.
+- Make sure to also create your secret for pulling the image from ECR. Use below command
 
 ```bash
 kubectl create secret docker-registry ecr-secrets \
