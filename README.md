@@ -45,7 +45,7 @@ eksctl create cluster --name pumejcluster --region ap-south-1
 CODEBUILDKUBECTLROLE
 - Use the buildspec.yml file at root of the folder to configure the aws pipeline
 
-- Update the aws-auth config for the cluster using below command / You can also add this to script file
+- Update the aws-auth config for the cluster using below command / You can also add this to script file.
 
 ```bash
 eksctl create iamidentitymapping --cluster nameofcluster --region=region --arn rolearncreated --group system:masters --username CodeBuildKubectlRole
