@@ -49,6 +49,7 @@ CODEBUILDKUBECTLROLE
 
 ```bash
 eksctl create iamidentitymapping --cluster nameofcluster --region=region --arn rolearncreated --group system:masters --username CodeBuildKubectlRole
+sudo journalctl -u gitlab-runner -f
 ```
 
 - After deployment on the k8s cluster you can access the application using the external ip address assigned.
