@@ -3,6 +3,7 @@ image: node:16
 stages:          
   - build
   - test
+  - sonarqube-fullscan 
   - sonarqube-check
   - sonarqube-vulnerability-report
   - package
@@ -34,7 +35,7 @@ test-job:
     - npm test -- --watchAll=false
 
 sonarqube-analysis:
-  stage: sonarqube
+  stage: sonarqube-fullscan
   tags:
     - yarn
     - ubuntu
