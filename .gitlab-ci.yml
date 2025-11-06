@@ -33,15 +33,15 @@ test-job:
     - npm install
     - npm test -- --watchAll=false
 
-# sonarqube-analysis:
-#   stage: sonarqube
-#   tags:
-#     - yarn
-#     - ubuntu
-#     - netflix
-#   script:
-#     - npm install -g sonar-scanner
-#     - sonar-scanner -Dsonar.projectKey=nodeproject -Dsonar.sources=. -Dsonar.host.url=http://192.168.248.133:9000 -Dsonar.login=$SONAR_TOKEN
+sonarqube-analysis:
+  stage: sonarqube
+  tags:
+    - yarn
+    - ubuntu
+    - netflix
+  script:
+    - npm install -g sonar-scanner
+    - sonar-scanner -Dsonar.projectKey=netflix-react-clone -Dsonar.sources=. -Dsonar.host.url=http://172.21.153.111:9000 -Dsonar.login=$SONAR_TOKEN
 
 sonarqube-check:
   stage: sonarqube-check
