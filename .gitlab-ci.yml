@@ -59,7 +59,7 @@ sonarqube-check:
   cache:
     key: "${CI_JOB_NAME}"
     paths:
-      - .sonar/cache
+      - /home/gitlab-runner/.sonar/cache
   script: 
     - sonar-scanner -Dsonar.token=$SONAR_TOKEN
   allow_failure: true
