@@ -41,7 +41,7 @@ sonarqube-analysis:
     - ubuntu
     - netflix
   script:
-    - npm install -g sonar-scanner
+    # - npm install sonar-scanner
     - sonar-scanner -Dsonar.projectKey=netflix-react-clone -Dsonar.sources=. -Dsonar.host.url=http://172.21.153.111:9000 -Dsonar.login=$SONAR_TOKEN
 
 sonarqube-check:
